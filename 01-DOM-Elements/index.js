@@ -31,6 +31,7 @@ let data = [
     url:
       "https://image.shutterstock.com/image-photo/bright-spring-view-cameo-island-260nw-1048185397.jpg",
     details: "lorem 10",
+    available:false
   },
 
   {
@@ -38,6 +39,7 @@ let data = [
     url:
       "https://image.shutterstock.com/image-photo/mountains-during-sunset-beautiful-natural-260nw-407021107.jpg",
     details: "lorem 20",
+    available:true
   },
 
   {
@@ -45,6 +47,7 @@ let data = [
     url:
       "https://image.shutterstock.com/image-photo/beautiful-pink-flower-anemones-fresh-260nw-1028135845.jpg",
     details: "lorem 30",
+    available:false
   },
 ];
 let container = document.createElement("div"); /* <div></div> */
@@ -55,6 +58,12 @@ container.style.display="flex"
 data.map((product) => {
   //creating card
   let card = document.createElement("div"); /* <div ></div> */
+ /*  if(product.available){
+    card.style.backgroundColor="green"
+  }else{
+    card.style.backgroundColor="red"
+  } */
+  card.style.backgroundColor= product.available ? "green" : "red"
   card.classList.add("card") /* <div class="card"></div> */
   card.style.width="300px"
   card.style.height="500px"
