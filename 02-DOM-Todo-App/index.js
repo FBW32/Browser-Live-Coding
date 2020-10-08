@@ -16,7 +16,7 @@ spans.forEach(span=>{
     span.style.cssText="position:absolute;right:30px"
 })
 
-let input= document.querySelector("input")
+let input = document.querySelector("input")
 
 
 let tasks = [
