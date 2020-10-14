@@ -20,17 +20,27 @@ form.addEventListener("submit",(e)=>{
     let li = document.createElement("li")
 // adding class to our li
     li.classList.add("list")
-li.addEventListener("click",()=>{
+/* li.addEventListener("click",(e)=>{
+    console.log(e.target)
+    li.classList.toggle("done")
     console.log("user Clicked on li")
-})
+}) */
 
     //creating span
     let span= document.createElement("span") //<span></span>
     span.innerHTML="X"//<span>X</span>
 
-span.addEventListener("click",()=>{
+/* span.addEventListener("click",(e)=>{
+    e.stopPropagation()
+    console.dir(e.target)
+    //remove parent element of that span
+    let answer= confirm("do you really want to remove this task")
+    if(answer){
+        ul.removeChild(e.target.parentElement)
+    }
+    
     console.log("user clicked on span")
-})
+}) */
 
 
 /* span.onclick= ()=>{
@@ -58,8 +68,30 @@ lis.forEach(li=>{
 }) */
 } )
 
+//event delegation
+//instead of attaching too many events to your elements ,attach single to parent element
+ul.addEventListener("click",(e)=>{
+    console.dir(e.target)
+   if(e.target.tagName==="LI"){
+    e.target.classList.toggle("done")
+   }
+   if(e.target.tagName==="SPAN"){
+       console.log(e.target.parentElement)
+    let answer= confirm("do you really want to remove this task")
+    if(answer){
+        ul.removeChild(e.target.parentElement)
+    }
+
+   }
+})
 
 
+/* let lis= document.querySelectorAll("li")
+lis.forEach(li=>{
+    li.addEventListener("click",()=>{
+        console.log("testing ")
+    })
+}) */
 
 
 
