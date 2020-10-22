@@ -1,8 +1,10 @@
 let root= document.getElementById("root")
-
+//crud
+/*          create read update and delete 
+  METHODS: POST   GET   PUT/PATCH  DELETE*/
 
 const fetchData=()=>{
-    fetch("https://jsonplaceholder.typicode.com/users",{method:"GET"}).then(response=>response.json()).then(result=>{
+    fetch("https://jsonplaceholder.typicode.com/users").then(response=>response.json()).then(result=>{
         console.log(result)
         result.map(user=>{
             let card = document.createElement("div")
