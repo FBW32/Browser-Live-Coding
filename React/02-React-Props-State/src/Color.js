@@ -5,7 +5,7 @@ function Color(props){
     console.log(props)
     return(
         <div style={ { backgroundColor:props.color,height:"100px" } } >
-            { props.color } 
+         { props.color } 
         </div>
     )
 }
