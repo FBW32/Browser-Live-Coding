@@ -1,31 +1,37 @@
 import React from 'react'
 
-export default function ToDosContainer() {
+export default class ToDosContainer extends React.Component {
 
-    const ToDos=[
-        {id:1, text:"Breakfast", done:false},
-        {id:2, text:"Start Lesson", done:false},
-        {id:3, text:"Live coding", done:false},
-        {id:4, text:"Lunch break", done:false}
-    ]
-    return (
+   state={
+       inputFieldValue:""
+   }
+
+   addData=(e)=>{
+    e.preventDefault()
+    console.log(this, "from Child todoscontainer")
+    this.props.addItem(this.state.inputFieldValue)
+
+   }
+
+   render(){
+       return (
         <div className="todos-container">
 
-                <form className="todo-form">
+                <form className="todo-form" onSubmit={this.addData}>
                     <label className="input-item">
-                        <input type="text" name="todo"/>
+                        <input type="text" name="todo" onChange={(e)=>this.setState({inputFieldValue:e.target.value})}/>
                     </label>
                     <input className="btn" type="submit" value="ADD"/>
                 </form>
 
                 <div className="todos">
                     <h3>TO DO</h3>
-                    {ToDos.map(todo=>{
+                    {this.props.toDos.map(todo=>{
                         return(
                             <div className="todo-item" key={todo.id}> 
                                 <p>{todo.text}</p>
                                 <div className="actions">
-                                    <button className="btn"> &#10004; </button>
+                                    <button className="btn" onClick={ ()=>this.props.updateItem(todo.id) } > &#10004; </button>
                                 </div>
                             </div>
                         )
@@ -33,4 +39,6 @@ export default function ToDosContainer() {
                 </div>
         </div>
     )
+   }
+    
 }
