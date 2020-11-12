@@ -6,6 +6,7 @@ import ToDonesContainer from "./components/ToDonesContainer";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
+import {v4} from "uuid"
 //User interface (UI) unit (Component)
 
 console.log(localStorage);
@@ -40,7 +41,7 @@ class App extends React.Component {
 
   addItem = (value) => {
     console.log(this, "this is from App");
-    let item = { id: this.state.todoItems.length, text: value, done: false };
+    let item = { id: v4(), text: value, done: false };
     let copystate = [...this.state.todoItems];
     copystate.push(item);
     this.setState(
@@ -85,7 +86,7 @@ class App extends React.Component {
         localStorage.setItem("todoapp", JSON.stringify(this.state.todoItems));
       })
   }
-  
+
   render() {
     let toDos = this.state.todoItems.filter((item) => !item.done);
     let toDones = this.state.todoItems.filter((item) => item.done);
