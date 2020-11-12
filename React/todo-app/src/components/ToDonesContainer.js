@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ToDonesContainer({toDones , updateItem}) {
+export default function ToDonesContainer({toDones , updateItem, deleteItem}) {
 
  /* const {toDones} = props  */
     return (
@@ -12,7 +12,7 @@ export default function ToDonesContainer({toDones , updateItem}) {
                         <p>{todone.text}</p>
                         <div className="actions">
                             <button className="btn" onClick={()=>updateItem(todone.id)}> &#8635; </button>
-                            <button className="btn" onClick={()=>updateItem(todone.id)}> &#x2718; </button>
+                            <button className="btn" onClick={()=>deleteItem(todone.id)}> &#x2718; </button>
                         </div>
                     </div>
                 )

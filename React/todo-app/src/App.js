@@ -8,30 +8,55 @@ import About from "./components/About";
 import NotFound from "./components/NotFound";
 //User interface (UI) unit (Component)
 
+console.log(localStorage);
+/* let data = {
+  name:"Ali",
+  age:23
+} */
+/* JSON.stringify() convert data into string
+  JSON.parse() convert back to its original form (if you are using synchronous code)*/
+
+//json() when you are working with asynchronous code to parse the data
+/* localStorage.setItem("data", JSON.stringify(data)) */
+
+/* console.log(JSON.parse(localStorage.getItem("data")).age) */
+/* localStorage.removeItem("data") */
+
 class App extends React.Component {
   state = {
-    todoItems: [
-      { id: 0, text: "Breakfast", done: false },
-      { id: 1, text: "Start Lesson", done: false },
-      { id: 2, text: "Live coding", done: false },
-      { id: 3, text: "Lunch break", done: false },
-      { id: 4, text: "Coding Practice", done: true },
-      { id: 5, text: "Exercises", done: true },
-      { id: 6, text: "Project", done: true },
-    ],
+    todoItems: [],
   };
+
+  componentDidMount() {
+    //onload
+    let data = localStorage.getItem("todoapp");
+    if (data) {
+      let convertedData = JSON.parse(data);
+      this.setState({
+        todoItems: convertedData,
+      });
+    }
+  }
 
   addItem = (value) => {
     console.log(this, "this is from App");
     let item = { id: this.state.todoItems.length, text: value, done: false };
     let copystate = [...this.state.todoItems];
     copystate.push(item);
-    this.setState({
-      todoItems: copystate,
-    });
+    this.setState(
+      {
+        todoItems: copystate,
+      },
+      () => {
+        localStorage.setItem("todoapp", JSON.stringify(this.state.todoItems));
+      }
+    );
+
     /*  this.setState({
         todoItems:[...this.state.todoItems, item]
-      }) */
+      },()=>{
+      localStorage.setItem("todoapp", JSON.stringify(this.state.todoItems))
+    } ) */
   };
 
   updateItem = (id) => {
@@ -46,9 +71,21 @@ class App extends React.Component {
 
     this.setState({
       todoItems: updatedItems,
+    },  () => {
+      localStorage.setItem("todoapp", JSON.stringify(this.state.todoItems));
     });
   };
 
+  deleteItem=(id)=>{
+     /*  let CopyState=[...this.state.todoItems] */
+      let updatedData = this.state.todoItems.filter(item=>item.id!==id)
+      this.setState({
+        todoItems:updatedData
+      },()=>{
+        localStorage.setItem("todoapp", JSON.stringify(this.state.todoItems));
+      })
+  }
+  
   render() {
     let toDos = this.state.todoItems.filter((item) => !item.done);
     let toDones = this.state.todoItems.filter((item) => item.done);
@@ -66,7 +103,7 @@ class App extends React.Component {
             {...props}
             toDones={toDones} updateItem={this.updateItem} /></div>}/>
  */}
-{/*  switch(condition){
+          {/*  switch(condition){
     case 1:
     case 2:
     default:
@@ -77,16 +114,17 @@ class App extends React.Component {
                 toDos={toDos}
                 addItem={this.addItem}
                 updateItem={this.updateItem}
+                deleteItem={this.deleteItem}
               />
               <ToDonesContainer
                 toDones={toDones}
                 updateItem={this.updateItem}
+                deleteItem={this.deleteItem}
               />
             </Route>
-
             <Route path="/about" component={About} />
-            <Route component={NotFound}/> {/* "Default Case" */}
-         </Switch>
+            <Route component={NotFound} /> {/* "Default Case" */}
+          </Switch>
         </div>
       </BrowserRouter>
     );
