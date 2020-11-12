@@ -1,16 +1,19 @@
 import React from 'react'
 import logo from "../images/logo.png"
+import {Link} from "react-router-dom"
 
 export default function Navigation() {
     return (
        <nav>
 
            <div className="left">
-               <img src={logo} alt="logo image"/>
+               <Link to="/"> 
+                    <img src={logo} alt="logo image"/>
+               </Link>
            </div>
 
            <div className="right">
-               <a href="#">About</a>
+               <Link to="/about">About</Link>
            </div>
 
        </nav>
