@@ -9,6 +9,9 @@ import {ProgressBar} from "react-bootstrap"
 function App() {
   const [users, setUsers] = useState([]);
   const [progress, setProgress] = useState(0);
+  //for storing file or image from user
+  const [file,setFile]=useState("")
+  const [uploadedimage,setUploadedImage]=useState("")
 
   //componentDidMount
   useEffect(() => {
@@ -45,7 +48,7 @@ function App() {
 })
       .catch((err) => console.log(err, ".......error")); */
 
-    Axios.post("https://reqres.in/api/login", user, {
+   /*  Axios.post("https://reqres.in/api/login", user, {
       onUploadProgress: (ProgressEvent) => {
         console.log(ProgressEvent);
         setProgress(
@@ -60,14 +63,52 @@ function App() {
       .then((response) => console.log(response))
       .catch((err) =>
         console.log(err.response.data.error, "error message from axios")
-      );
+      ); */
   }, []);
 
+
+  const uploadImage=(e)=>{
+    e.preventDefault()
+    const upload_preset="Use Your own upload_preset"
+    const base_url="https://api.cloudinary.com/v1_1/<CloudName>/image/upload"
+  
+    let formData= new FormData()
+
+    formData.append("file",file)
+    formData.append("upload_preset",upload_preset)
+
+    Axios.post(base_url, formData, {
+    onUploadProgress: (ProgressEvent) => {
+      console.log(ProgressEvent);
+      setProgress(
+        Math.floor((ProgressEvent.loaded * 100) / ProgressEvent.total)
+      );
+      console.log(
+        Math.floor((ProgressEvent.loaded * 100) / ProgressEvent.total),
+        "%"
+      );
+    }
+  })
+    .then((response) => {
+      console.log(response)
+     setUploadedImage(response.data.secure_url)
+    })
+    .catch((err) =>
+      console.log(err.response.data.error, "error message from axios")
+    );
+  }
   return (
     <div>
       <Header />
     {/*   this is taken from reactbootstrap to display progress bar */}
-      <ProgressBar variant="danger" now={progress} /> 
+      <form onSubmit={uploadImage}>
+        <label>Upload file: <input type="file" onChange={e=>setFile(e.target.files[0])}/></label>
+      <input type="submit" value="upload"/>
+      </form>
+
+      {progress>0&&<ProgressBar variant="danger" now={progress} /> }
+
+      {progress===100 && <img src={uploadedimage}/>} 
       {/* <h3>Progress bar = {progress}%</h3> */}
       <div className="row">
         {users.map((user) => {
