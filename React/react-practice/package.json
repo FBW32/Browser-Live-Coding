@@ -9,10 +9,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "react": "^16.12.0",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^16.12.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.0"
   },
   "eslintConfig": {

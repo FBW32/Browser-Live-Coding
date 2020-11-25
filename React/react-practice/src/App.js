@@ -1,67 +1,66 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Wrapper from "./components/Wrapper";
+import Axios from "axios";
+import { HashRouter, Route, Switch } from "react-router-dom";
+import Recipe from "./components/Recipe";
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      searchValue: "chicken",
-    };
-    console.log("constructor");
-  }
+export default function App() {
+  const [data, setData] = useState([]);
+  const [searchValue, setsearchValue] = useState("chicken");
 
-  static getDerivedStateFromProps() {
-    //react will execute this code just before the render
-    console.log("getDerivedStateFromProps");
-    return null;
-  }
+  useEffect(() => {
+    //componentDidMount
+    /* this will code execute only once */
+    getData();
+  }, []);
 
-  getData=()=>{
-    fetch(
-      `https://api.edamam.com/search?q=${this.state.searchValue}&app_id=${process.env.REACT_APP_ID}&app_key=${process.env.REACT_APP_API_KEY}`
+  const getData = () => {
+    Axios.get(
+      `https://api.edamam.com/search?q=${searchValue}&app_id=${process.env.REACT_APP_ID}&app_key=${process.env.REACT_APP_API_KEY}`
+    ).then((result) => setData(result.data.hits));
+
+    /*  fetch(
+      `https://api.edamam.com/search?q=${searchValue}&app_id=${process.env.REACT_APP_ID}&app_key=${process.env.REACT_APP_API_KEY}`
     )
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-       this.setState({ data: result.hits }); 
-      });
-  }
-  componentDidMount() {
-    //this code will execute only once
-    console.log("ComponentDidMount");
-      this.getData()
-  }
-  searchData = (e) => {
-    e.preventDefault();
-    this.getData()
+       setData(result.hits) 
+      }); */
   };
 
-  shouldComponentUpdate(nextprops,nextstate){
-      console.log("shouldcomponentupdate")
-      return true
-  }
-  render() {
-    console.log(this.state.data, "....render Method")
-    return (
-      <div className="container">
-        <div className="container bg-dark text-white">
-          <h1>Recipe APP</h1>
-          <form className="text-right" onSubmit={this.searchData}>
-            <label>
-              Search Recipe:{" "}
-              <input
-                type="text"
-                onChange={(e) => this.setState({ searchValue: e.target.value })}
-              />
-            </label>
-            <input type="submit" value="search" />
-          </form>
-        </div>
+  const searchData = (e) => {
+    e.preventDefault();
+    getData();
+  };
 
-        <Wrapper data={this.state.data} />
-      </div>
-    );
-  }
+  return (
+    <HashRouter>
+      <Switch>
+        <Route exact path="/">
+          <div className="container">
+            <div className="container bg-dark text-white">
+              <h1>Recipe APP</h1>
+              <form className="text-right" onSubmit={searchData}>
+                <label>
+                  Search Recipe:{" "}
+                  <input
+                    type="text"
+                    onChange={(e) => setsearchValue(e.target.value)}
+                  />
+                </label>
+                <input type="submit" value="search" />
+              </form>
+            </div>
+
+            <Wrapper data={data} />
+          </div>
+        </Route>
+     {/*    <Route path="/recipe/:productname" render= { (props)=> <Recipe {...props} data={data}/> }/> */}
+     <Route path="/recipe/:productname" component={Recipe}/>
+        
+      </Switch>
+    </HashRouter>
+  );
 }
