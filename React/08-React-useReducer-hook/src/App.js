@@ -1,24 +1,16 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
+import {initialValue,reducer} from "./Reducer"
 
 function App() {
-  const [count, setCount] = useState(0);
-  //event handler
-  const increment=()=>{
-    setCount(count+1)
-  }
-  const decrement=()=>{
-    setCount(count-1)
-  }
-  const reset=()=>{
-    setCount(0)
-  }
+  const [count, Dispatch] = useReducer(reducer, initialValue)
   return (
     <div className="App">
       <h1>useReducer Hook</h1>
-      <h2>Counter : {count}</h2>
-      <button onClick={increment}>increment</button>
-      <button onClick={decrement}>decrement</button>
-      <button onClick={reset}>reset</button>
+      <h2>Counter : {count} </h2>
+     {/*  //dipatching actions */}
+      <button onClick={()=>Dispatch("increment")}>increment</button>
+      <button onClick={()=>Dispatch("decrement")} >decrement</button>
+      <button  onClick={()=>Dispatch("reset")} >reset</button>
     </div>
   );
 }
