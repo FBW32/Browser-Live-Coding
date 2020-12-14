@@ -1,0 +1,11 @@
+{
+  "name": "01-nodejs-modules",
+  "version": "1.0.0",
+  "description": "this is my frist node project",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Naqvi",
+  "license": "ISC"
+}
