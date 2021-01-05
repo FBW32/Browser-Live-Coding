@@ -6,31 +6,11 @@ const lowdb = require("lowdb");
 const FileSync = require("lowdb/adapters/FileSync");
 //create a json file
 const adopter = new FileSync("db.json");
-
 const db = lowdb(adopter);
-// Set some defaults
-/* db.defaults({
-  users: [
-    { id: 1, name: "Naqvi" },
-    { id: 2, name: "Joseph" },
-  ],
-}).write() */;//save data into that file
 
 //3000 is the development port and process.env.PORT is for production
 const PORT = 3000 || process.env.PORT;
 
-const MiddleWare = (req, res, next) => {
-  console.log(req);
-  console.log("I am a MiddleWare");
-  if (req.method === "GET" || req.method==="POST") {
-    console.log("received get Request");
-    next();
-  } else {
-    res.send("please send only get/post request");
-  }
-};
-
-/* app.use(MiddleWare); */
 //express json middleware, to parse req.body 
 app.use(express.json())
 
@@ -55,6 +35,7 @@ app.get("/users", (req,res)=>{
     let users = db.get("users").sortBy("id").value()
     //sending reponse to our client
     res.json({users:users})
+   /*  res.send({users:users}) */
     //end process 
 })
 
@@ -74,7 +55,7 @@ app.patch("/users/:id",(req,res)=>{
 
         db.get("users")
         .find({id:idParam})
-        .assign(req.body)
+        .assign(req.body) //replace/update
         .write()
 
         res.json({success:true,message:"user updated"})

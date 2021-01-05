@@ -1,12 +1,16 @@
 {
   "users": [
-    {"id":1,
-    "name":"Naqvi"}
-  ],
-  "posts": [
     {
       "id": 1,
-      "message": "hello world"
+      "name": "Naqvi"
+    },
+    {
+      "id": 2,
+      "name": "Peter"
+    },
+    {
+      "id": 3,
+      "name": "John"
     }
   ]
 }
