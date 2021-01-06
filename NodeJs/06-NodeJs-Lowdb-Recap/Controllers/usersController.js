@@ -1,9 +1,16 @@
 const db = require("../Model/db");
 
-exports.getSingleUser = (req, res) => {
+exports.getSingleUser = (req, res, next) => {
   let idParam = parseInt(req.params.id);
   let user = db.get("users").find({ id: idParam }).value();
-  res.json({ success: true, user: user });
+  if(user){
+      res.json({ success: true, user: user });
+  }else{
+    let error = new Error("user not found")
+    error.status= 404
+    next(error)   
+  }
+
 };
 
 exports.getAllUsers = (req, res) => {
