@@ -16,7 +16,14 @@ app.use(express.json())
 app.use(setCors)
 
 //template Engines
+//EJS Enbedded Javascript Template
+//jade known as Pug
+//handlebars
+//setting view engine for app
+app.set("view engine","ejs" ) 
 
+//serve static files from public folder
+app.use(express.static("public"))
 
 app.use("/users",usersRoutes)
 app.use("/",indexRoute)
