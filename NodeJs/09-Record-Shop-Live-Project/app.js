@@ -12,6 +12,7 @@ const app = express()
 /* USE MIDDLEWARES */
 /* app.use(here specify middleware) */
 app.use(morgan("dev"))
+app.use(express.json())
 
 
 /* ROUTES */

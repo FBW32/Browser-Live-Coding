@@ -1,0 +1,18 @@
+{
+  "records": [
+    {
+      "title": "Village",
+      "artist": "John",
+      "year": 2017,
+      "price": 25,
+      "image": "this is a url"
+    },
+    {
+      "title": "title 2",
+      "artist": "david",
+      "year": 2020,
+      "price": 26,
+      "image": "this is a url 1"
+    }
+  ]
+}
