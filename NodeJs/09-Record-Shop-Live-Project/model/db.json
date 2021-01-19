@@ -1,4 +1,12 @@
 {
   "records": [
+    {
+      "id": "1",
+      "title": "title 3",
+      "artist": "Peter",
+      "year": 2021,
+      "price": 26,
+      "image": "this is a url 1"
+    }
   ]
 }

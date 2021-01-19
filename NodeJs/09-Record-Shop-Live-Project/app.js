@@ -14,11 +14,25 @@ const app = express()
 app.use(morgan("dev"))
 app.use(express.json())
 
-
 /* ROUTES */
  app.use("/", indexRoute ) 
  app.use("/api/records", recordsRoute)
+ 
+ /* ERROR HANDLING */
+ //404 no route match
+ app.use((req,res,next)=>{
+       let error = new Error("No such route found")
+       console.log(error.message)
+       error.status= 404;
+       next(error)
+ })
 
+//universal Error handler
+app.use((err,req,res,next)=>{
+    res.status(err.status || 500).send({
+        success:false,message : err.message 
+    })
+})
 
 
 
