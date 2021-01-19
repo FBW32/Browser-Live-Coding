@@ -3,7 +3,8 @@ const express = require("express")
 const morgan = require("morgan")
 const indexRoute = require("./routes/indexRoute")
 const recordsRoute = require("./routes/recordsRoute")
-
+const usersRoute = require("./routes/usersRoute")
+const ordersRoute = require("./routes/ordersRoute")
 /* INIT : creating express server*/
 const app = express()
 
@@ -17,6 +18,8 @@ app.use(express.json())
 /* ROUTES */
  app.use("/", indexRoute ) 
  app.use("/api/records", recordsRoute)
+ app.use("/api/users", usersRoute)
+ app.use("/api/orders" , ordersRoute)
  
  /* ERROR HANDLING */
  //404 no route match
