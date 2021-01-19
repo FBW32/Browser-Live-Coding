@@ -11,7 +11,7 @@ exports.getAllRecords= (req,res,next)=>{
 exports.postAddNewRecord= (req,res,next)=>{
     console.log(req.body)
     //add Record into db.json
-    db.get("records").push(req.body).write()
+    db.get("records").push(req.body).assign({id:new Date().getTime().toString()}).write()
 
     res.send("NEW record added into database")
 }
