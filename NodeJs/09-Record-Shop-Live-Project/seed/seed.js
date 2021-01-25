@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const UserData = require("../model/userModel"); //model
+const faker = require("faker");
 //connect our application with mongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/new-record-shop", {
   useNewUrlParser: true,
@@ -17,19 +18,33 @@ mongoose.connection.on("error", () => {
   console.log("Error found while connecting");
 });
 
-//perform different operation with mongoDB
+//delete all users from users collection
 
-const user = new UserData({
-  firstName: "Lawrance",
-  lastName: "lastName",
-  email: "abc@gmail.com",
-  password:"123"
-});
-//asynchronous code
-//store this user in database
-user.save().then(() => {
-  console.log("user stored in database");
-  //after finish all tasks
-  //close mongoDB connection.
+
+
+//perform different operation with mongoDB
+const users = Array(10)
+  .fill(null)
+  .map(() => {
+    const user = new UserData({
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    });
+    //asynchronous code
+    //store this user in database
+    return user.save(); //Promise
+  });
+
+//resolve all Promises inside an array
+//it is only to close mongoose connection
+//Promise.all only accept Array of Promises
+ Promise.all(users).then(() => {
+  console.log("all users stored inside the database");
   mongoose.connection.close();
-});
+}); 
+
+//after finish all tasks
+//close mongoDB connection.
+/* mongoose.connection.close(); */
