@@ -35,16 +35,18 @@ const users = Array(10)
     //asynchronous code
     //store this user in database
     return user.save(); //Promise
+
   });
 
 //resolve all Promises inside an array
 //it is only to close mongoose connection
-//Promise.all only accept Array of Promises
+//Promise.all only accepts Array of Promises
+
  Promise.all(users).then(() => {
   console.log("all users stored inside the database");
-  mongoose.connection.close();
-}); 
 
 //after finish all tasks
 //close mongoDB connection.
-/* mongoose.connection.close(); */
+  mongoose.connection.close();
+}); 
+
