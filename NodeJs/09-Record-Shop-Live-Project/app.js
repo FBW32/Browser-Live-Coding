@@ -1,6 +1,7 @@
 /* EXTERNAL MODULES */
 const express = require("express")
 const morgan = require("morgan")
+const mongoose = require("mongoose")
 const indexRoute = require("./routes/indexRoute")
 const recordsRoute = require("./routes/recordsRoute")
 const usersRoute = require("./routes/usersRoute")
@@ -14,6 +15,26 @@ const app = express()
 /* app.use(here specify middleware) */
 app.use(morgan("dev"))
 app.use(express.json())
+
+ //connect our application with mongoDB
+/*  mongoose.connect(MongoUrl,options,callback) */
+ mongoose.connect("mongodb://127.0.0.1:27017/new-record-shop", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },()=>console.log("connection established between app and mongodb"));
+
+
+/*   //open/connect
+  //listening for event
+  mongoose.connection.on("open", () => {
+    console.log("database connection established");
+  });
+  //error/connection error
+  //listening for event
+  mongoose.connection.on("error", () => {
+    console.log("Error found while connecting");
+  }); */
+
 
 /* ROUTES */
  app.use("/", indexRoute ) 
