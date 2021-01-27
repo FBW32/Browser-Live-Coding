@@ -1,4 +1,4 @@
-const db = require("../model/db");
+
 const RecordData = require("../model/recordModel");
 
 exports.getAllRecords = async (req, res, next) => {
@@ -17,44 +17,53 @@ exports.postAddNewRecord = async (req, res, next) => {
   console.log(req.body);
   try {
     const record = new RecordData(req.body);
-    await record.save();//store data into database
-    res.status(200).send({record})
+    await record.save(); //store data into database
+    res.status(200).send({ record });
   } catch (err) {
-      console.log(err.message)
-   /*  res.status(404).send({err:err.message}) */
+    console.log(err.message);
+    /*  res.status(404).send({err:err.message}) */
+    next(err);
+  }
+};
+
+exports.putUpdateRecord = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+      const updatedRecord = await RecordData.findByIdAndUpdate(id, req.body,{new:true})
+      res.status(200).send({updatedRecord})
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteSingleRecord = async (req, res, next) => {
+  const { id } = req.params;
+try{
+    const RecordDeleted= await RecordData.findByIdAndRemove(id)
+    if(RecordDeleted){
+         res.status(200).send({RecordDeleted})
+    }else{
+        res.status(404).send("Already Deleted that record")  
+    }
+    
+}
+catch(err){
     next(err)
-  }
-
+}
 };
 
-exports.putUpdateRecord = (req, res, next) => {
+exports.getSingleRecord = async (req, res, next) => {
   const { id } = req.params;
-  //selector/pointer //finding that record //update properties //store changes
-  db.get("records").find({ id }).assign(req.body).write();
+    try{
+        const record = await RecordData.findById(id).select("-_id -__v")
+        if(record){
+            res.status(200).send({record})
+        }
+        else{
+            res.status(404).send("No such record found with that Id")
+        }
+    }catch(err){next(err)}
 
-  res.send("record updated");
-};
-
-exports.deleteSingleRecord = (req, res, next) => {
-  const { id } = req.params;
-  //selector/pointer //finding that record //deleting record //store changes
-  let record = db.get("records").find({ id }).value();
-  if (record) {
-    db.get("records").remove({ id }).write();
-    res.send("record deleted");
-  } else {
-    let error = new Error("no such record found in database");
-    error.status = 404;
-    next(error);
-  }
-};
-
-exports.getSingleRecord = (req, res, next) => {
-  const { id } = req.params;
-  let singleRecord = db.get("records").find({ id }).value();
-  /*  res.send({singleRecord}) */
-  res.status(200).json({ success: true, record: singleRecord });
-  /*  res.status(404).json({success:false,message: "we couldn't find record with that specified ID"}) */
 };
 
 //CRUD operation
