@@ -1,4 +1,3 @@
-const db = require("../model/db")
 const OrderData= require("../model/orderModel")
 
 exports.getAllOrders= (req,res,next)=>{
