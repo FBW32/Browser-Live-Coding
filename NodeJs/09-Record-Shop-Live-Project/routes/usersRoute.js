@@ -3,7 +3,7 @@ const express = require("express")
 const router = express.Router()
 
 const {getAllUsers,postAddNewUser,putUpdateUser,deleteSingleUser,getSingleUser} = require("../controllers/usersController")
-const db = require("../model/db")
+
 
 /* GET ALL UserS FROM RESOURCES */
 router.get("/", getAllUsers )

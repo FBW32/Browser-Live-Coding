@@ -2,9 +2,7 @@
 const RecordData = require("../model/recordModel");
 
 exports.getAllRecords = async (req, res, next) => {
-  //getting/reading all records from db.json
-  //db.get("records")=> target this property in db.json
-  // .value() that means get value of that property
+  //getting/reading all records from mongoDB
   try {
     let allRecords = await RecordData.find();
     res.status(200).send({ allRecords });
@@ -15,6 +13,7 @@ exports.getAllRecords = async (req, res, next) => {
 
 exports.postAddNewRecord = async (req, res, next) => {
   console.log(req.body);
+  //adding new Record into mongoDB
   try {
     const record = new RecordData(req.body);
     await record.save(); //store data into database
@@ -28,6 +27,7 @@ exports.postAddNewRecord = async (req, res, next) => {
 
 exports.putUpdateRecord = async (req, res, next) => {
   const { id } = req.params;
+    //finding existing record with that id in database and update
   try {
       const updatedRecord = await RecordData.findByIdAndUpdate(id, req.body,{new:true})
       res.status(200).send({updatedRecord})
@@ -38,10 +38,11 @@ exports.putUpdateRecord = async (req, res, next) => {
 
 exports.deleteSingleRecord = async (req, res, next) => {
   const { id } = req.params;
+    //finding existing record with that id in database and delete
 try{
-    const RecordDeleted= await RecordData.findByIdAndRemove(id)
-    if(RecordDeleted){
-         res.status(200).send({RecordDeleted})
+    const recordDeleted= await RecordData.findByIdAndRemove(id)
+    if(recordDeleted){
+         res.status(200).send({recordDeleted})
     }else{
         res.status(404).send("Already Deleted that record")  
     }
@@ -54,6 +55,7 @@ catch(err){
 
 exports.getSingleRecord = async (req, res, next) => {
   const { id } = req.params;
+  //get/read single record from mongodb
     try{
         const record = await RecordData.findById(id).select("-_id -__v")
         if(record){
