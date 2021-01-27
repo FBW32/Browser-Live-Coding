@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const UserData = require("../model/userModel"); //model
+const UserData = require("../model/userModel"); //users model
+const RecordData = require("../model/recordModel"); //records model
 const faker = require("faker");
 
 async function seed() {
@@ -24,15 +25,21 @@ async function seed() {
   //delete all users from users collection
   /* Promise.then().then().catch() */
   /*  try{}catch(err){} */
-  try {
+   try {
     await UserData.deleteMany({});
     console.log("all previous users deleted from database");
   } catch (err) {
     console.log(err);
   }
 
+  try {
+    await RecordData.deleteMany({});
+    console.log("all previous records deleted from database");
+  } catch (err) {
+    console.log(err.message);
+  }
   //perform different operation with mongoDB
-  const users = Array(10)
+   const users = Array(10)
     .fill(null)
     .map(() => {
       const user = new UserData({
@@ -44,9 +51,8 @@ async function seed() {
       //asynchronous code
       //store this user in database
       return user.save(); //Promise
-    });
-
-  //resolve all Promises inside an array
+    }); 
+ //resolve all Promises inside an array
   //it is only to close mongoose connection
   //Promise.all only accepts Array of Promises
 
@@ -55,7 +61,28 @@ async function seed() {
     console.log("all users stored inside the database");
   } catch (err) {
     console.log(err.message);
+  } 
+  //add records in records collection
+  const records = Array(10)
+    .fill(null)
+    .map(() => {
+      const record = new RecordData({
+        title: faker.commerce.productName(),
+        artist: faker.name.firstName(),
+        year: faker.date.past().getUTCFullYear(),
+        img: faker.image.imageUrl(),
+        price: faker.commerce.price(),
+      });
+      return record.save();
+    });
+  try {
+    await Promise.all(records);
+    console.log("records added into database")
+  } catch (err) {
+    console.log(err.message);
   }
+
+ 
 
   //after finish all tasks
   //close mongoDB connection.
