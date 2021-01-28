@@ -1,6 +1,5 @@
 
 const RecordData = require("../model/recordModel");
-
 exports.getAllRecords = async (req, res, next) => {
   //getting/reading all records from mongoDB
   try {

@@ -1,6 +1,5 @@
 
 const UserData= require("../model/userModel")
-
 exports.getAllUsers= async(req,res,next)=>{
     //getting all users from mongoDB
     try {
@@ -12,7 +11,7 @@ exports.getAllUsers= async(req,res,next)=>{
 }
 
 exports.postAddNewUser= async (req,res,next)=>{
-    console.log(req.body)
+ /*    console.log(req.body) */
     //adding new User into mongoDB
     try {
         const user = new UserData(req.body);
