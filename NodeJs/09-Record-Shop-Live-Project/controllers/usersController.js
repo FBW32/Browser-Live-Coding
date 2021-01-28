@@ -40,9 +40,9 @@ exports.deleteSingleUser=async (req,res,next)=>{
     const {id} = req.params
     //finding that User //deleting User
     try{
-        const RecordDeleted= await RecordData.findByIdAndRemove(id)
-        if(RecordDeleted){
-             res.status(200).send({RecordDeleted})
+        const UserDeleted= await UserData.findByIdAndRemove(id)
+        if(UserDeleted){
+             res.status(200).send({UserDeleted})
         }else{
             res.status(404).send("Already Deleted that record")  
         }
@@ -56,9 +56,9 @@ exports.getSingleUser=async (req,res,next)=>{
     const {id} = req.params
     //get/read single user from mongoDB
     try{
-        const record = await RecordData.findById(id).select("-_id -__v")
-        if(record){
-            res.status(200).send({record})
+        const user = await UserData.findById(id).select("-_id -__v")
+        if(user){
+            res.status(200).send({user})
         }
         else{
             res.status(404).send("No such record found with that Id")
