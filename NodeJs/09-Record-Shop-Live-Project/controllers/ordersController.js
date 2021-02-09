@@ -3,7 +3,7 @@ const OrderData= require("../model/orderModel")
 exports.getAllOrders= async (req,res,next)=>{
    //getting/reading all orders from mongoDB
   try {
-    let allOrders = await OrderData.find();
+    let allOrders = await OrderData.find().populate("records","-_id -__v").populate("user","-password -_id -__v").select("-__v");
     res.status(200).send({ allOrders });
   } catch (err) {
     next(err);
