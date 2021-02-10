@@ -1,10 +1,14 @@
 
 const RecordData = require("../model/recordModel");
+
 exports.getAllRecords = async (req, res, next) => {
+  console.log(req.user)
   //getting/reading all records from mongoDB
   try {
-    let allRecords = await RecordData.find();
-    res.status(200).send({ allRecords });
+
+      let allRecords = await RecordData.find();
+      res.status(200).send({ allRecords });
+
   } catch (err) {
     next(err);
   }
@@ -26,10 +30,12 @@ exports.postAddNewRecord = async (req, res, next) => {
 
 exports.putUpdateRecord = async (req, res, next) => {
   const { id } = req.params;
-    //finding existing record with that id in database and update
+  //finding existing record with that id in database and update
   try {
-      const updatedRecord = await RecordData.findByIdAndUpdate(id, req.body,{new:true})
-      res.status(200).send({updatedRecord})
+    const updatedRecord = await RecordData.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).send({ updatedRecord });
   } catch (err) {
     next(err);
   }
@@ -37,34 +43,32 @@ exports.putUpdateRecord = async (req, res, next) => {
 
 exports.deleteSingleRecord = async (req, res, next) => {
   const { id } = req.params;
-    //finding existing record with that id in database and delete
-try{
-    const recordDeleted= await RecordData.findByIdAndRemove(id)
-    if(recordDeleted){
-         res.status(200).send({recordDeleted})
-    }else{
-        res.status(404).send("Already Deleted that record")  
+  //finding existing record with that id in database and delete
+  try {
+    const recordDeleted = await RecordData.findByIdAndRemove(id);
+    if (recordDeleted) {
+      res.status(200).send({ recordDeleted });
+    } else {
+      res.status(404).send("Already Deleted that record");
     }
-    
-}
-catch(err){
-    next(err)
-}
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getSingleRecord = async (req, res, next) => {
   const { id } = req.params;
   //get/read single record from mongodb
-    try{
-        const record = await RecordData.findById(id).select("-_id -__v")
-        if(record){
-            res.status(200).send({record})
-        }
-        else{
-            res.status(404).send("No such record found with that Id")
-        }
-    }catch(err){next(err)}
-
+  try {
+    const record = await RecordData.findById(id).select("-_id -__v");
+    if (record) {
+      res.status(200).send({ record });
+    } else {
+      res.status(404).send("No such record found with that Id");
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 //CRUD operation

@@ -33,5 +33,6 @@ router.delete("/:id", deleteSingleUser);
 //GET SIGNLE User FRO  DATABASE
 router.get("/:id", getSingleUser);
 
+
 /* DEFAULT EXPORT */
 module.exports = router;

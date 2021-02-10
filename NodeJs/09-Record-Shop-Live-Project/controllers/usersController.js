@@ -12,9 +12,14 @@ exports.getAllUsers = async (req, res, next) => {
 exports.postAddNewUser = async (req, res, next) => {
   /*    console.log(req.body) */
   //adding new User into mongoDB
-
   try {
-    const user = new UserData(req.body);
+    const user =new UserData(req.body)
+ /*    const user = new UserData({
+      firstName:req.body.firstName,
+      lastName:req.body.lastName,
+      email:req.body.email,
+      password:hashpassword
+    }); */
     await user.save(); //store data into database
     res.status(200).send({ user });
   } catch (err) {
