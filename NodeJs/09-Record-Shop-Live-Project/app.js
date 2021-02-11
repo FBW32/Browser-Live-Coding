@@ -1,11 +1,19 @@
 /* EXTERNAL MODULES */
 const express = require("express")
-const morgan = require("morgan")
+/* const morgan = require("morgan") */
 const mongoose = require("mongoose")
 const indexRoute = require("./routes/indexRoute")
 const recordsRoute = require("./routes/recordsRoute")
 const usersRoute = require("./routes/usersRoute")
 const ordersRoute = require("./routes/ordersRoute")
+
+const dotenv = require("dotenv")
+dotenv.config();
+
+
+//set PORT number
+const PORT = 3000 || process.env.PORT 
+
 /* INIT : creating express server*/
 const app = express()
 
@@ -13,12 +21,12 @@ const app = express()
 
 /* USE MIDDLEWARES */
 /* app.use(here specify middleware) */
-app.use(morgan("dev"))
+/* app.use(morgan("dev")) */
 app.use(express.json())
 
  //connect our application with mongoDB
 /*  mongoose.connect(MongoUrl,options,callback) */
- mongoose.connect("mongodb://127.0.0.1:27017/new-record-shop", {
+ mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },()=>console.log("connection established between app and mongodb"));
@@ -61,7 +69,7 @@ app.use((err,req,res,next)=>{
 
 
 /* Listening Port */
-app.listen(3000, ()=>console.log("server is running"))
+app.listen(PORT, ()=>console.log("server is running on port "+PORT))
 
 /* MVC modal views controller (pattern) */
  

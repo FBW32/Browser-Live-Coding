@@ -1,42 +1,77 @@
-const mongoose = require("mongoose")
-const AddressSchema = require("./adressSchema")
- const Schema = mongoose.Schema;
-const {encrypt}= require("../lib/encryption");
-const { compare } = require("../lib/encryption");
-
-const JWT = require("jsonwebtoken")
-
+const mongoose = require("mongoose");
+const AddressSchema = require("./adressSchema");
+const Schema = mongoose.Schema;
+//hashing password and verifying/comparing passwords
+const { encrypt, compare } = require("../lib/encryption");
+//creating/signing token and verifying token
+const JWT = require("jsonwebtoken");
 
 //definining our schema
 /* User is a instance from Schema Class */
 const UserSchema = new Schema({
-    firstName:{type:String, required:true},
-    lastName:{type:String, required:true},
-    email:{type:String, required:true},
-    password:{type:String, required:true},
-    address: AddressSchema
-})
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["Admin", "User"],
+    required: true,
+  },
+  tokens: [{ token: { type: String, required: true } }],
+  address: AddressSchema,
+});
 
-UserSchema.pre("save",function(next){
-    //dont update or hashed password if it is not modified
-    if( ! this.isModified("password")) return next()
+//this method we are using to Hash password just before storing into database
+UserSchema.pre("save", function (next) {
+  //dont update or hashed password if it is not modified
+  if (!this.isModified("password")) return next();
 
-    this.password = encrypt(this.password)
-    next()
-})
+  this.password = encrypt(this.password);
+  next();
+});
 
-UserSchema.methods.checkPassword=function(password){
-    console.log("method created in user model")
-    return compare(password,this.password)
-   
-}
+//it will compare user password with hashed password stored inside the database and return boolean value
+UserSchema.methods.checkPassword = function (password) {
+  console.log("method created in user model");
+  return compare(password, this.password);
+};
 
-UserSchema.statics.generateAuthToken=function(){
-const token = JWT.sign({_id:this._id,email:this.email },"secretkey" )
-console.log(token)
-}
+//once user is created ,we will call this function and this function will create a token for that user and push that token into tokens array.
+UserSchema.methods.generateAuthToken = function () {
+  const user = this;
+  /* JWT.sign(Payload, SecretKey,Options) */
+  console.log(process.env.SECRET_KEY)
+  const token = JWT.sign({ _id: user._id, email: user.email }, process.env.SECRET_KEY);
 
+  console.log(token);
+  //we are pushing token into user's Tokens array
+  user.tokens.push({ token: token });
+    user.save()
+  return token;
+};
+
+//verify auth token and finding that user into database
+UserSchema.statics.findByToken = function (token) {
+  const user = this;
+
+  let decoded;
+  try {
+    decoded = JWT.verify(token, process.env.SECRET_KEY);
+  } catch (err) {
+    return;
+  }
+
+  let searchedUser = user
+    .findOne({
+      _id: decoded._id,
+      "tokens.token": token,
+    })
+    .select("-password -__v");
+
+  return searchedUser;
+};
 
 /* creating/exporting our users Model */
 /* mongoose.model(<Collection>,<Document>) */
-module.exports =  mongoose.model("users",UserSchema) //model
+module.exports = mongoose.model("users", UserSchema); //model

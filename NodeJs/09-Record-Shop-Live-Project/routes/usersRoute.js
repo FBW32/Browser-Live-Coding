@@ -9,13 +9,14 @@ const {
   deleteSingleUser,
   getSingleUser,
 } = require("../controllers/usersController");
+const {auth} =require("../middlewares/anthentication")
 
 const Rules = require("../lib/validationRules")
 
 const Validation  =require("../middlewares/validation")
 
 /* GET ALL UserS FROM RESOURCES */
-router.get("/", getAllUsers);
+router.get("/",auth, getAllUsers);
 
 /* POST REQUEST TO ADD NEW User */
 router.post(
@@ -25,13 +26,13 @@ router.post(
 );
 
 /* PUT REQUEST TO UPDATE SIGNLE User IN DATABASE */
-router.put("/:id", putUpdateUser);
+router.put("/:id",auth , putUpdateUser);
 
 /* DELETE REQUEST TO DELETE SIGNLE User IN DATABASE */
-router.delete("/:id", deleteSingleUser);
+router.delete("/:id",auth,  deleteSingleUser);
 
 //GET SIGNLE User FRO  DATABASE
-router.get("/:id", getSingleUser);
+router.get("/:id",auth , getSingleUser);
 
 
 /* DEFAULT EXPORT */

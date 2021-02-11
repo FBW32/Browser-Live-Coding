@@ -14,14 +14,11 @@ exports.postAddNewUser = async (req, res, next) => {
   //adding new User into mongoDB
   try {
     const user =new UserData(req.body)
- /*    const user = new UserData({
-      firstName:req.body.firstName,
-      lastName:req.body.lastName,
-      email:req.body.email,
-      password:hashpassword
-    }); */
     await user.save(); //store data into database
-    res.status(200).send({ user });
+
+    let token =  await user.generateAuthToken()
+
+    res.status(200).header("x-auth",token).send({ user });
   } catch (err) {
     console.log(err.message);
     /*  res.status(404).send({err:err.message}) */
