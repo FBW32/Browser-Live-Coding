@@ -1,6 +1,6 @@
 /* EXTERNAL MODULES */
 const express = require("express")
-/* const morgan = require("morgan") */
+const morgan = require("morgan")
 const mongoose = require("mongoose")
 const indexRoute = require("./routes/indexRoute")
 const recordsRoute = require("./routes/recordsRoute")
@@ -12,7 +12,7 @@ dotenv.config();
 
 
 //set PORT number
-const PORT = 3000 || process.env.PORT 
+const PORT = 4000 || process.env.PORT 
 
 /* INIT : creating express server*/
 const app = express()
@@ -21,8 +21,18 @@ const app = express()
 
 /* USE MIDDLEWARES */
 /* app.use(here specify middleware) */
-/* app.use(morgan("dev")) */
+app.use(morgan("dev"))
 app.use(express.json())
+
+const cors = (req,res,next)=>{
+  res.header("Access-Control-Allow-Origin","*")
+  res.header("Access-Control-Allow-Methods","*")
+  res.header("Access-Control-Allow-Headers","*")
+  res.header("Access-Control-Allow-Expose","*")
+  next()
+}
+
+app.use(cors)
 
  //connect our application with mongoDB
 /*  mongoose.connect(MongoUrl,options,callback) */

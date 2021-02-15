@@ -17,7 +17,7 @@ exports.postAddNewUser = async (req, res, next) => {
     await user.save(); //store data into database
 
     let token =  await user.generateAuthToken()
-
+   
     res.status(200).header("x-auth",token).send({ user });
   } catch (err) {
     console.log(err.message);
