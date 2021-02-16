@@ -51,6 +51,17 @@ UserSchema.methods.generateAuthToken = function () {
   return token;
 };
 
+//Public field
+UserSchema.methods.getPublicFields=function(){
+  const user = this; 
+  return {
+    firstName:user.firstName,
+    lastName:user.lastName,
+    email:user.email,
+    _id:user._id
+  }
+}
+
 //verify auth token and finding that user into database
 UserSchema.statics.findByToken = function (token) {
   const user = this;

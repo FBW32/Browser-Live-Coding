@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
+import { MyContext } from "../App";
 
-export default function Signup() {
+
+export default function Signup(props) {
+  const {setIsLogin ,setUserData, setToken} =useContext(MyContext)
   /*  const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]=useState("")
@@ -20,15 +23,38 @@ export default function Signup() {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log(user);
-    /* AJAX  REST */
+
+    /* AJAX */
     fetch("http://localhost:4000/api/users", {
       method: "POST",
       headers:{ "Content-Type" : "application/json" }, 
       body: JSON.stringify(user),
     })
-      .then((res) => res.json())
-      .then((result) => console.log(result));
+      .then((res) => {
+        console.log(res.headers.get("x-auth"))
+        let headertoken = res.headers.get("x-auth")
+        setToken(headertoken)
+        localStorage.setItem("token",headertoken)
+        return res.json()
+      })
+      .then((response) => {
+        if(response.success){
+          console.log(response.user)
+          //storing user into context
+          setUserData(response.user)
+          setIsLogin(true)
+          let obj={
+            islogin:true,
+            user:response.user
+          }
+  
+          localStorage.setItem("userdata",JSON.stringify(obj))
+
+          props.history.push("/profile")
+        }else{
+          console.log(response)
+        }
+      }).catch(err=>console.log(err))
     /*     const formData = new FormData(e.target)
 
     let user= {  address:{}  }
@@ -58,7 +84,6 @@ export default function Signup() {
           <input
             type="text"
             name="firstName"
-            required
             placeholder="First Name"
             onChange={grabValue}
           />

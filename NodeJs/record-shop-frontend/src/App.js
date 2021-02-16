@@ -13,9 +13,10 @@ function App() {
 
        const [isLogin,setIsLogin] = useState(false)
        const [userData,setUserData]= useState(null)
+       const [token,setToken]=useState(null)
        
   return (
-    <MyContext.Provider value={{isLogin,setIsLogin ,userData,setUserData}}> 
+    <MyContext.Provider value={{isLogin,setIsLogin ,userData,setUserData,token,setToken}}> 
         <BrowserRouter> 
               <div className="App">
                     <h1>Record Shop</h1>
