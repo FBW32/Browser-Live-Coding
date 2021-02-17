@@ -7,7 +7,7 @@ exports.getAllRecords = async (req, res, next) => {
   try {
 
       let allRecords = await RecordData.find();
-      res.status(200).send({ allRecords });
+      res.status(200).send({ success:true, allRecords });
 
   } catch (err) {
     next(err);
@@ -20,7 +20,7 @@ exports.postAddNewRecord = async (req, res, next) => {
   try {
     const record = new RecordData(req.body);
     await record.save(); //store data into database
-    res.status(200).send({ record });
+    res.status(200).send({ success:true, record });
   } catch (err) {
     console.log(err.message);
     /*  res.status(404).send({err:err.message}) */
@@ -35,7 +35,7 @@ exports.putUpdateRecord = async (req, res, next) => {
     const updatedRecord = await RecordData.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    res.status(200).send({ updatedRecord });
+    res.status(200).send({  success:true,updatedRecord });
   } catch (err) {
     next(err);
   }
@@ -47,7 +47,7 @@ exports.deleteSingleRecord = async (req, res, next) => {
   try {
     const recordDeleted = await RecordData.findByIdAndRemove(id);
     if (recordDeleted) {
-      res.status(200).send({ recordDeleted });
+      res.status(200).send({ success:true, recordDeleted });
     } else {
       res.status(404).send("Already Deleted that record");
     }
@@ -62,9 +62,9 @@ exports.getSingleRecord = async (req, res, next) => {
   try {
     const record = await RecordData.findById(id).select("-_id -__v");
     if (record) {
-      res.status(200).send({ record });
+      res.status(200).send({ success:true, record });
     } else {
-      res.status(404).send("No such record found with that Id");
+      res.status(404).send({ success:false,message:"No such record found with that Id"});
     }
   } catch (err) {
     next(err);
