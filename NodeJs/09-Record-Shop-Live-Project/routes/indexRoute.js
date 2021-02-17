@@ -22,16 +22,19 @@ router.post("/login", async(req,res,next)=>{
         }
         
         console.log(user.password , password)
-        let check = compare(password, user.password)
+       /*  let check = compare(password, user.password) */
+       let check = await user.checkPassword(password)
        /*  let check = user.checkPassword(password) */
         if(!check){
             throw new Error("password doesn't match")
         }
-        let token = JWT.sign({_id:user._id,email:user.email}, "secretcode")
+       /*  let token = JWT.sign({_id:user._id,email:user.email}, "secretcode") */
+        let token =  await user.generateAuthToken()
+        let publicUser = await user.getPublicFields()
 
         res.header("x-auth",token)
        /*  res.cookie("token",token) */
-        res.send("you successfull logged in")
+        res.send({success:true,user:publicUser})
 
     }
     catch(err){
