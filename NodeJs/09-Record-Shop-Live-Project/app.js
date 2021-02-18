@@ -12,7 +12,7 @@ dotenv.config();
 
 
 //set PORT number
-const PORT = 4000 || process.env.PORT 
+const PORT = 5000 || process.env.PORT 
 
 /* INIT : creating express server*/
 const app = express()
