@@ -1,11 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MyContext } from "../App";
 
 export default function Records(props) {
-  const { records, setRecords, token, userData, cart , setCart } = useContext(MyContext);
+  const { records, setRecords, token, userData, cart, setCart } = useContext(
+    MyContext
+  );
+
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/records", {
+    fetch("/record/api/records", {
       method: "GET",
       headers: { "x-auth": token },
     })
@@ -20,30 +23,31 @@ export default function Records(props) {
       .catch((err) => console.log(err));
   }, []); //component did mount (execute once)
 
-
-  const handleDelete=(id)=>{
-    fetch(`http://localhost:4000/api/records/${id}`,{
-      method:"DELETE",
-      headers:{
-        "x-auth": token
-      }
+  const handleDelete = (id) => {
+    fetch(`/api/records/${id}`, {
+      method: "DELETE",
+      headers: {
+        "x-auth": token,
+      },
     })
-    .then(res=>res.json())
-    .then(result=>{
-      if(result.success){
-       let updatedRecords=records.filter(record=>record._id!==result.recordDeleted._id )
-        setRecords(updatedRecords) 
-      }else{
-        console.log(result.message)
-      }
-    })
-  }
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) {
+          let updatedRecords = records.filter(
+            (record) => record._id !== result.recordDeleted._id
+          );
+          setRecords(updatedRecords);
+        } else {
+          console.log(result.message);
+        }
+      });
+  };
 
-  const addToCart=(item)=>{
-      let copyCart=[...cart,item]
-     /*  copyCart.push(item) */
-      setCart(copyCart)
-  }
+  const addToCart = (item) => {
+    let copyCart = [...cart, item];
+    /*  copyCart.push(item) */
+    setCart(copyCart);
+  };
 
   return (
     <div>
@@ -66,13 +70,15 @@ export default function Records(props) {
               <h4>Artist: {record.artist}</h4>
               <p>Year: {record.year}</p>
               <p>Price: {record.price}$</p>
-              { userData.role === "Admin" ? (
+              {userData.role === "Admin" ? (
                 <>
-            
-                  <button onClick={()=>handleDelete(record._id)}>Delete Record</button> <button>Edit Record</button>{" "}
+                  <button onClick={() => handleDelete(record._id)}>
+                    Delete Record
+                  </button>{" "}
+                  <button>Edit Record</button>{" "}
                 </>
               ) : (
-                <button onClick={()=>addToCart(record)}>Add to Cart</button>
+                <button onClick={() => addToCart(record)} disabled={cart.includes(record)}>{cart.includes(record)?"Added":"Add to Cart" } </button>
               )}
             </div>
           );
@@ -81,3 +87,4 @@ export default function Records(props) {
     </div>
   );
 }
+

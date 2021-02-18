@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Profile from "./components/Profile";
 import NotFound from "./components/NotFound";
 import Records from "./components/Records";
+import Cart from "./components/Cart";
 
 export const MyContext = createContext(null);
 
@@ -81,6 +82,13 @@ function App(props) {
               <li>Records</li>{" "}
             </Link>
           )}
+
+           {isLogin && (
+            <Link to="/cart">
+              <li>Cart <span style={{backgroundColor:"green",color:"white",padding:"2px 4px",borderRadius:"50%"}}>{cart.length}</span></li>{" "}
+            </Link>
+          )}
+
           {isLogin && (
             <span style={{color:"darkblue",textDecoration:"underline",cursor:"pointer"}}>
               <li onClick={logout}>Logout</li>{" "}
@@ -94,6 +102,7 @@ function App(props) {
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Profile} />
           <Route path="/records" component={Records} />
+          <Route path="/cart" component={Cart} />
           <Route component={NotFound} />
         </Switch>
       </div>
