@@ -3,10 +3,10 @@ const { time } = require("faker");
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-  quantity: {
+/*   quantity: {
     type: Number,
     required: true,
-  },
+  }, */
   records: [{ ref: "records", type: mongoose.Schema.Types.ObjectId }],
   user: { ref: "users", type: mongoose.Schema.Types.ObjectId }
 });
