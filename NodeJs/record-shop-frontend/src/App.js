@@ -14,6 +14,7 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [token, setToken] = useState(null);
   const [records, setRecords] = useState([]);
+  const [cart,setCart]=useState([])
 
   //onload we are reading,what data we have in localStorage
   useEffect(() => {
@@ -50,6 +51,8 @@ function App(props) {
         setToken,
         records,
         setRecords,
+        cart,
+        setCart
       }}
     >
       <div className="App">
