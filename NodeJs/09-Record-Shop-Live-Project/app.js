@@ -1,27 +1,34 @@
 /* EXTERNAL MODULES */
 const express = require("express")
-const morgan = require("morgan")
+const dotenv = require("dotenv")
+dotenv.config();
+
 const mongoose = require("mongoose")
 const indexRoute = require("./routes/indexRoute")
 const recordsRoute = require("./routes/recordsRoute")
 const usersRoute = require("./routes/usersRoute")
 const ordersRoute = require("./routes/ordersRoute")
 
-const dotenv = require("dotenv")
-dotenv.config();
 
-
+const config= require("./config/configuration")
 //set PORT number
 const PORT = 5000 || process.env.PORT 
 
 /* INIT : creating express server*/
 const app = express()
 
+//serve static files
+app.use(express.static("build"))
+
 /* in express all the controllers are the middlewares */
 
 /* USE MIDDLEWARES */
 /* app.use(here specify middleware) */
-app.use(morgan("dev"))
+if(config.environment==="development"){
+  const morgan = require("morgan")
+  app.use(morgan("dev"))
+}
+
 app.use(express.json())
 
 const cors = (req,res,next)=>{
@@ -36,7 +43,7 @@ app.use(cors)
 
  //connect our application with mongoDB
 /*  mongoose.connect(MongoUrl,options,callback) */
- mongoose.connect(process.env.MONGO_URI, {
+ mongoose.connect(config.mongo_uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },()=>console.log("connection established between app and mongodb"));

@@ -25,7 +25,7 @@ export default function Signup(props) {
     e.preventDefault();
 
     /* AJAX */
-    fetch("http://localhost:4000/api/users", {
+    fetch("/api/users", {
       method: "POST",
       headers:{ "Content-Type" : "application/json" }, 
       body: JSON.stringify(user),

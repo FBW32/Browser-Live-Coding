@@ -9,6 +9,7 @@ const {compare} = require("../lib/encryption")
 const JWT = require("jsonwebtoken")
 router.get("/", index)
 
+
 //login 
 router.post("/login", async(req,res,next)=>{
     const { email, password} = req.body

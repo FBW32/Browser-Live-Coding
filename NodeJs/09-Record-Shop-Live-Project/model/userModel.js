@@ -6,6 +6,7 @@ const { encrypt, compare } = require("../lib/encryption");
 //creating/signing token and verifying token
 const JWT = require("jsonwebtoken");
 
+const config = require("../config/configuration")
 //definining our schema
 /* User is a instance from Schema Class */
 const UserSchema = new Schema({
@@ -42,7 +43,7 @@ UserSchema.methods.generateAuthToken = function () {
   const user = this;
   /* JWT.sign(Payload, SecretKey,Options) */
   console.log(process.env.SECRET_KEY)
-  const token = JWT.sign({ _id: user._id, email: user.email }, process.env.SECRET_KEY);
+  const token = JWT.sign({ _id: user._id, email: user.email }, config.secret_key);
 
   console.log(token);
   //we are pushing token into user's Tokens array
@@ -69,7 +70,7 @@ UserSchema.statics.findByToken = function (token) {
 
   let decoded;
   try {
-    decoded = JWT.verify(token, process.env.SECRET_KEY);
+    decoded = JWT.verify(token, config.secret_key);
   } catch (err) {
     return;
   }

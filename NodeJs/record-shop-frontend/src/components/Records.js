@@ -8,7 +8,7 @@ export default function Records(props) {
 
 
   useEffect(() => {
-    fetch("/record/api/records", {
+    fetch("/api/records", {
       method: "GET",
       headers: { "x-auth": token },
     })
